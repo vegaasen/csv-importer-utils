@@ -16,7 +16,7 @@ public class Run {
             CsvUtils.setDelimiter(";");
             CsvUtils.setCharset(Charset.forName("windows-1252"));
             Map<Integer, Map<String, String>> csvElements = CsvUtils.getElementsFromCsv(
-                    "C:\\temp\\certificates\\all_certs_020513.csv",
+                    "C:\\temp\\certificates\\01.01.12.csv",
                     true
             );
             System.out.println(String.format("Amount of elements {%s}..", csvElements.size()));

@@ -26,6 +26,7 @@ public final class CsvUtils {
     private static String delimiter = String.valueOf(DEFAULT_DELIMITER);
     private static char delimiter_char = DEFAULT_DELIMITER;
     private static Charset charset = DEFAULT_CHARSET;
+    private static boolean omitFirstLine = false;
 
     private CsvUtils() {
     }
@@ -76,7 +77,7 @@ public final class CsvUtils {
             Map<Integer, Map<String, String>> entries = new TreeMap<>();
             List<String> titles = new ArrayList<>();
             String currentLine;
-            boolean completedFirstLine = false;
+            boolean completedFirstLine = false, omitted = false;
             int counter = 0, position = 0;
             while ((currentLine = input.readLine()) != null) {
                 if (!"".equals(currentLine)) {
@@ -85,11 +86,19 @@ public final class CsvUtils {
                         if (!completedFirstLine) {
                             if (currentLine.contains(delimiter)) {
                                 Collections.addAll(titles, currentLine.split(delimiter));
+                            } else {
+                                throw new RuntimeException(
+                                        String.format("Unable to find {%s} as delimiter. Wrong delimiter?", delimiter)
+                                );
                             }
                             completedFirstLine = true;
                         }
                     }
                     final Map<String, String> entryLine = new TreeMap<>();
+                    if (omitFirstLine) {
+                        omitFirstLine = false;
+                        continue;
+                    }
                     for (String entry : currentLine.split(delimiter)) {
                         if (entry.contains(PLACEHOLDER_STR)) {
                             entry = entry.replaceAll(PLACEHOLDER_STR, delimiter);
@@ -103,6 +112,7 @@ public final class CsvUtils {
                     entries.put(counter, entryLine);
                     position = 0;
                     counter++;
+
                 }
             }
             return entries;
@@ -144,15 +154,19 @@ public final class CsvUtils {
         return sb.toString();
     }
 
-    public static void setDelimiter(String del) {
+    public static void setDelimiter(final String del) {
         if (!"".equals(del)) {
             delimiter = del;
             delimiter_char = del.charAt(0);
         }
     }
 
-    public static void setCharset(Charset chSet) {
+    public static void setCharset(final Charset chSet) {
         charset = chSet;
+    }
+
+    public static void setOmitFirstLine(final boolean choice) {
+        omitFirstLine = choice;
     }
 
 }

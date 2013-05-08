@@ -30,6 +30,19 @@ public final class CsvUtilsTest {
     }
 
     @Test
+    public void shouldGetObjectFromCsvFile_omittedStuff() {
+        CsvUtils.setOmitFirstLine(true);
+        final String expectedElement = "123";
+        final Map<Integer, Map<String, String>> csvElements = CsvUtils.getElementsFromCsv(csvFile, true);
+        assertNotNull(csvElements);
+        assertFalse(csvElements.isEmpty());
+        Map<String, String> firstRow = csvElements.get(0);
+        assertNotNull(firstRow);
+        assertFalse(firstRow.isEmpty());
+        assertEquals(expectedElement, firstRow.get("Id"));
+    }
+
+    @Test
     public void shouldGetObjectFromCsvFile() {
         final String expectedElement = "Id";
         final Map<Integer, Map<String, String>> csvElements = CsvUtils.getElementsFromCsv(csvFile);

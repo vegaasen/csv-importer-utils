@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * @author <a href="vegard.aasen@telenor.com">Vegard Aasen</a>
  */
-public class FileUtils {
+public final class FileUtils {
 
     private static final int DEFAULT_BUFFER_SIZE = 65536;
     private static int bufferSize = DEFAULT_BUFFER_SIZE;
