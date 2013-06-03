@@ -20,7 +20,7 @@ public final class CsvUtils {
 
     private static final String EMPTY = "";
     private static final char HYPHEN = '"';
-    private static final char PLACEHOLDER = '§';
+    private static final char PLACEHOLDER = '|';
     private static final String PLACEHOLDER_STR = String.valueOf(PLACEHOLDER);
 
     private static String delimiter = String.valueOf(DEFAULT_DELIMITER);
