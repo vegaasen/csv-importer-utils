@@ -21,12 +21,14 @@ public final class CsvUtilsTest {
     private String location;
     private String locationForStrangeFormat;
     private File csvFile;
+    private File csvFileStrangeFormat;
 
     @Before
     public void setUp() throws FileNotFoundException {
-        location = "C:\\_dev\\workspace_telenor\\playhouse\\file-reader\\src\\test\\resources\\test.csv";
-        locationForStrangeFormat = "C:\\_dev\\workspace_telenor\\playhouse\\file-reader\\src\\test\\resources\\test_strange_delim.csv";
-        csvFile = FileUtils.getFile(location);
+        location = "/test.csv";
+        locationForStrangeFormat = "/test_strange_delim.csv";
+        csvFile = FileUtils.getFileFromClassPath(location);
+        csvFileStrangeFormat = FileUtils.getFileFromClassPath(locationForStrangeFormat);
     }
 
     @Test
@@ -69,7 +71,7 @@ public final class CsvUtilsTest {
     @Test
     public void shouldGetObjectFromCsvFilePath() throws FileNotFoundException {
         final String expectedElement = "123";
-        final Map<Integer, Map<String, String>> csvElements = CsvUtils.getElementsFromCsv(location);
+        final Map<Integer, Map<String, String>> csvElements = CsvUtils.getElementsFromCsv(csvFile);
         assertNotNull(csvElements);
         assertFalse(csvElements.isEmpty());
         Map<String, String> firstRow = csvElements.get(1);
@@ -81,7 +83,7 @@ public final class CsvUtilsTest {
     @Test
     public void shouldGetStuffFromCsvFile_withTitles() throws FileNotFoundException {
         final String expectedElement = "Id";
-        final Map<Integer, Map<String, String>> csvElements = CsvUtils.getElementsFromCsv(location, true);
+        final Map<Integer, Map<String, String>> csvElements = CsvUtils.getElementsFromCsv(csvFile, true);
         assertNotNull(csvElements);
         assertFalse(csvElements.isEmpty());
         Map<String, String> firstRow = csvElements.get(0);
@@ -95,7 +97,7 @@ public final class CsvUtilsTest {
         CsvUtils.setDelimiter("#");
         final String expectedElement = "123";
         final Map<Integer, Map<String, String>> csvElements =
-                CsvUtils.getElementsFromCsv(locationForStrangeFormat, true);
+                CsvUtils.getElementsFromCsv(csvFileStrangeFormat, true);
         assertNotNull(csvElements);
         assertFalse(csvElements.isEmpty());
         Map<String, String> firstRow = csvElements.get(1);
@@ -110,7 +112,7 @@ public final class CsvUtilsTest {
         CsvUtils.setCharset(Charset.forName("ISO-8859-1"));
         final String expectedElement = "123";
         final Map<Integer, Map<String, String>> csvElements =
-                CsvUtils.getElementsFromCsv(locationForStrangeFormat, true);
+                CsvUtils.getElementsFromCsv(csvFileStrangeFormat, true);
         assertNotNull(csvElements);
         assertFalse(csvElements.isEmpty());
         Map<String, String> firstRow = csvElements.get(1);
@@ -125,7 +127,7 @@ public final class CsvUtilsTest {
         CsvUtils.setCharset(Charset.forName("UTF-8"));
         final String expectedElement = "123";
         final Map<Integer, Map<String, String>> csvElements =
-                CsvUtils.getElementsFromCsv(locationForStrangeFormat, true);
+                CsvUtils.getElementsFromCsv(csvFileStrangeFormat, true);
         assertNotNull(csvElements);
         assertFalse(csvElements.isEmpty());
         Map<String, String> firstRow = csvElements.get(1);

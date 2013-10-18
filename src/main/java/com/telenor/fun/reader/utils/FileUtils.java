@@ -1,6 +1,8 @@
 package com.telenor.fun.reader.utils;
 
 import java.io.*;
+import java.net.JarURLConnection;
+import java.net.URL;
 
 /**
  * @author <a href="vegard.aasen@telenor.com">Vegard Aasen</a>
@@ -10,10 +12,34 @@ public final class FileUtils {
     private static final int DEFAULT_BUFFER_SIZE = 65536;
     private static int bufferSize = DEFAULT_BUFFER_SIZE;
 
+    public static File getFileFromClassPath(final String fileName) {
+        if (!"".equals(fileName)) {
+            final URL url = FileUtils.class.getResource(fileName);
+            if (url != null) {
+                String resource = null;
+                try {
+                    switch (url.getProtocol()) {
+                        case "file":
+                            resource = url.getFile();
+                            break;
+                        case "jar":
+                            JarURLConnection connection = (JarURLConnection) url.openConnection();
+                            resource = connection.getJarFile().getName();
+                    }
+                    return new File(resource);
+                } catch (Exception e) {
+                    //eating the error..
+                }
+            }
+            return null;
+        }
+        throw new IllegalArgumentException("Missing argument fileName.");
+    }
+
     public static File getFile(final String filename) throws FileNotFoundException {
         if (!"".equals(filename)) {
             final File file = new File(filename);
-            if(file.exists()) {
+            if (file.exists()) {
                 return file;
             }
             throw new FileNotFoundException(String.format("Unable to find file %s", filename));
@@ -22,7 +48,7 @@ public final class FileUtils {
     }
 
     public static BufferedReader getBufferedReader(final File file) throws FileNotFoundException {
-        if(file!=null) {
+        if (file != null) {
             return new BufferedReader(new FileReader(file));
         }
         throw new IllegalArgumentException("Missing argument");
