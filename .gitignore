@@ -5,8 +5,8 @@
 # Project stuff
 *.iml
 *.ipr
-=======
 *.class
+.idea/
 
 # Package Files #
 *.jar
